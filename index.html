@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML5 Video Player With Synchronized Annotations</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <style type="text/css">
+        .jumbotron {
+            padding: 0;
+            margin-bottom: 0;
+        }
+
+        .videoControls {
+            width: 100%;
+            font-size: 20px;
+        }
+
+        .videoControls span, .videoControls div {
+            display: inline-block;
+            color: #999;
+        }
+
+        .btnMute, .btnFullscreen {
+            float: right;
+            padding-left: 20px;
+            margin-right: 20px;
+            color: #999;
+        }
+
+        .btnPlay {
+            padding-right: 20px;
+            margin-left: 20px;
+            color: #999;
+        }
+
+        .glyphicon:hover {
+            color: #555;
+        }
+
+        .blackboard {
+            background-color: #000;
+            color: #fff;
+            min-height: 100%;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .blackboard a:link, a:visited {
+            font-size: 1.5em;
+            color: greenyellow;
+        }
+        .player {
+            min-width: 400px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="row jumbotron">
+    <div id="player" class="player col-sm-12 col-md-6">
+        <video id="videoPlayer"
+               controls
+               width="100%"
+               poster="videos/poster.jpg">
+            <source src="videos/BigBuckBunny_512kb.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <div id="blackboard" class="blackboard col-sm-12 col-md-6"></div>
+</div>
+
+<div class="videoControls">
+    <div class="videoTime col-xs-6">
+        <span class="elapsedTime"></span>/<span class="videoLength"></span>
+    </div>
+</div>
+
+<!-- HTML timed articles -->
+<article data-start="0" data-end="5">
+    <p>Slow pan down to the forest.</p>
+</article>
+
+<article data-start="5" data-end="9">
+    <p>Keep panning...</p>
+</article>
+
+<article data-start="9" data-end="15">
+    <p>John Williams-y orchestra overture begins.</p>
+</article>
+
+<article data-start="15" data-end="19">
+    <p>Purple bird chirps.</p>
+</article>
+
+<article data-start="21" data-end="23">
+    <p>*klonk*.</p>
+    <p>Show the producer credits</p>
+</article>
+
+<article data-start="25" data-end="28">
+    <p>Here's the movie title</p>
+</article>
+
+<article data-start="28" data-end="30">
+    <p>Establishment shot on a rabbit hole</p>
+</article>
+
+<article data-start="31" data-end="34">
+    <p>Get closer...</p>
+</article>
+
+<article data-start="34" data-end="39">
+    <p>And closer...</p>
+</article>
+
+<article data-start="41" data-end="45">
+    <p>Whoa, wait! Is that a gorilla?</p>
+</article>
+
+<article data-start="47" data-end="50">
+    <p>Nope, just Ralph Kramden in a rabbit suit.</p>
+</article>
+
+<article data-start="50" data-end="53">
+    <p>No more annotations.  Thanks for watching.</p>
+    <a href="http://alphatest.net/videosync/">Watch it again</a>
+</article>
+
+<script>
+    $( document ).ready(function() {
+
+        // Force blackboard to the same height as the player.
+        $(window).resize(function() {
+            $("#blackboard").height($("#player").height());
+        })
+        $(window).resize(); // On page load
+
+        // HTML5 video event handlers.
+        var videoPlayer = $('#videoPlayer');
+
+        $('.btnPlay').click(function() {
+            if (videoPlayer[0].paused) {
+                videoPlayer[0].play();
+                $('.glyphicon-play').attr('class', 'glyphicon glyphicon-pause');
+            }
+            else {
+                videoPlayer[0].pause();
+                $('.glyphicon-pause').attr('class', 'glyphicon glyphicon-play');
+            }
+            return false;
+        })
+
+        videoPlayer.on('loadedmetadata', function() {
+            $('.videoLength').text(Math.round(videoPlayer[0].duration));
+        });
+
+        videoPlayer.on('play', function() {
+            $(window).resize();
+        });
+
+        $('.btnMute').click(function() {
+            if (videoPlayer[0].muted == false) {
+                videoPlayer[0].muted = true;
+                $('.glyphicon-volume-up').attr('class', 'glyphicon glyphicon-volume-off');
+            } else {
+                videoPlayer[0].muted = false;
+                $('.glyphicon-volume-off').attr('class', 'glyphicon glyphicon-volume-up');
+            }
+        });
+
+        $('.btnFullscreen').on('click', function() {
+            videoPlayer[0].webkitEnterFullscreen();
+            videoPlayer[0].mozRequestFullScreen();
+            return false;
+        });
+
+        // Timed article display.
+        var timestamps = [];
+        var last = 0;
+        var all = 0;
+        var now = 0;
+        var old = 0;
+        var i = 0;
+
+        // Hide all articles via CSS
+        $('article').hide();
+
+         // Loop over the articles, read the timestamp start and end and store
+         // them in an array
+        $('article').each(function(o) {
+            if ($(this).attr('data-start')) {
+                timestamps.push({
+                    start : +$(this).attr('data-start'),
+                    end : +$(this).attr('data-end'),
+                    elm : $(this)
+                });
+            }
+        });
+
+        all = timestamps.length;
+
+         // When the video is playing, round up the time to seconds and call the
+         // showsection function continuously
+        $('video').bind('timeupdate', function(event) {
+            now = Math.round(videoPlayer[0].currentTime);
+            $('.elapsedTime').text(now);
+            //now = parseInt(this.currentTime);
+
+            // Throttle function calls to full seconds
+            if (now > old){
+                showArticle(now);
+            }
+            old = now;
+        });
+
+         // Test whether the current time is within the range of any of the
+         // defined timestamps and show the appropriate section.
+         // Hide all others.
+        function showArticle(t)
+        {
+            for (i = 0; i < all; i++) {
+                if (t >= timestamps[i].start && t <= timestamps[i].end) {
+                    $('#blackboard').html(timestamps[i].elm.html());
+                    break;
+                }
+                else {
+                    $('#blackboard').html('');
+                }
+            }
+        };
+    });
+</script>
+</body>
+</html>
