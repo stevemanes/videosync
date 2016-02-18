@@ -122,9 +122,9 @@
     <p>Nope, just Ralph Kramden in a rabbit suit.</p>
 </article>
 
-<article data-start="50" data-end="53">
+<article data-start="50" data-end="55">
     <p>No more annotations.  Thanks for watching.</p>
-    <a href="http://alphatest.net/videosync/">Watch it again</a>
+    <a href="index.html">Watch it again</a>
 </article>
 
 <script>
@@ -201,7 +201,7 @@
         all = timestamps.length;
 
          // When the video is playing, round up the time to seconds and call the
-         // showsection function continuously
+         // showsection function continuously.
         $('video').bind('timeupdate', function(event) {
             now = Math.round(videoPlayer[0].currentTime);
             $('.elapsedTime').text(now);
@@ -215,8 +215,8 @@
         });
 
          // Test whether the current time is within the range of any of the
-         // defined timestamps and show the appropriate section.
-         // Hide all others.
+         // defined timestamps and show the appropriate section by copying it
+         // to the blackboard.
         function showArticle(t)
         {
             for (i = 0; i < all; i++) {
