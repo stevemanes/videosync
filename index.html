@@ -94,7 +94,7 @@
 </article>
 
 <article data-start="21" data-end="23">
-    <p>*klonk*.</p>
+    <p>*klonk*</p>
     <p>Show the producer credits</p>
 </article>
 
@@ -116,6 +116,12 @@
 
 <article data-start="41" data-end="45">
     <p>Whoa, wait! Is that a gorilla?</p>
+    <div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item"
+            src="https://en.wikipedia.org/wiki/Gorilla"
+            style="-webkit-transform:scale(0.5);-moz-transform-scale(0.5);">
+    </iframe>
+    </div>
 </article>
 
 <article data-start="47" data-end="50">
@@ -177,11 +183,11 @@
 
         // Timed article display.
         var timestamps = [];
-        var last = 0;
         var all = 0;
         var now = 0;
         var old = 0;
         var i = 0;
+        var currentlyShowing = -1;
 
         // Hide all articles via CSS
         $('article').hide();
@@ -219,14 +225,26 @@
          // to the blackboard.
         function showArticle(t)
         {
+            var show = -1;      // Default: don't update the blackboard.
+
+            // See if we have an active annotation.
             for (i = 0; i < all; i++) {
                 if (t >= timestamps[i].start && t <= timestamps[i].end) {
-                    $('#blackboard').html(timestamps[i].elm.html());
+                    show = i;
                     break;
                 }
-                else {
-                    $('#blackboard').html('');
+            }
+
+            // We have an active annotation.
+            if (show > -1) {
+                // Are we already showing it?
+                if (currentlyShowing != show) {
+                    $('#blackboard').html(timestamps[show].elm.html());
+                    currentlyShowing = show;
                 }
+            }
+            else {
+                $('#blackboard').html('');
             }
         };
     });
