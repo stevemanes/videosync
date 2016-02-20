@@ -3,10 +3,14 @@
 <head>
     <title>HTML5 Responsive Video Player with Synchronized Annotations</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style type="text/css">
+        .container-fluid {
+            padding: 5px !important;
+        }
         .jumbotron {
-            padding: 0;
+            padding: 0 !important;
             margin-bottom: 0;
         }
 
@@ -37,11 +41,14 @@
             color: #555;
         }
 
+        .blackboard-container {
+            min-height: 100%;
+            margin: 0 auto;
+            padding: 0px 12px 15px 12px;
+        }
         .blackboard {
             background-color: #000;
             color: #fff;
-            min-height: 100%;
-            margin: 0 auto;
             text-align: left;
         }
         .blackboard a:link, a:visited {
@@ -49,32 +56,72 @@
             color: greenyellow;
         }
         .player {
-            min-width: 400px;
         }
     </style>
 </head>
 <body>
+<div class="container-fluid">
 
-<div class="row jumbotron">
-    <div id="player" class="player col-sm-12 col-md-6">
-        <video id="videoPlayer"
-               controls
-               width="100%"
-               poster="videos/poster.jpg">
-            <source src="videos/BigBuckBunny_512kb.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+    <!-- Nav bar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">VideoAnnotation</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lockers<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Locker 1</a></li>
+                            <li><a href="#">Locker 2</a></li>
+                            <li><a href="#">Locker 3</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Themes<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header">Admin & Dashboard</li>
+                            <li><a href="#">Admin</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Video starts -->
+        <div class="row jumbotron">
+            <div id="player" class="player col-sm-12 col-md-6">
+                <video id="videoPlayer"
+                       controls
+                       width="100%"
+                       poster="videos/poster.jpg">
+                    <source src="videos/BigBuckBunny_512kb.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <div class="blackboard-container col-sm-12 col-md-6">
+                <div id="blackboard" class="blackboard"></div>
+            </div>
+        </div>
+
+        <div class="row videoControls">
+            <div class="videoTime col-xs-6">
+                <span class="elapsedTime"></span>/<span class="videoLength"></span>
+            </div>
+        </div>
     </div>
-
-    <div id="blackboard" class="blackboard col-sm-12 col-md-6"></div>
 </div>
-
-<div class="videoControls">
-    <div class="videoTime col-xs-6">
-        <span class="elapsedTime"></span>/<span class="videoLength"></span>
-    </div>
-</div>
-
 <!-- HTML timed articles -->
 <article data-start="0" data-end="5">
     <p>Slow pan down to the forest.</p>
@@ -141,11 +188,13 @@
     <a href="index.html">Watch it again</a>
 </article>
 
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+
 <script>
     $( document ).ready(function() {
 
@@ -154,6 +203,7 @@
             $("#blackboard").height($("#player").height());
         })
         $(window).resize(); // On page load
+
 
         // HTML5 video event handlers.
         var videoPlayer = $('#videoPlayer');
@@ -205,8 +255,8 @@
         // Hide all articles via CSS
         $('article').hide();
 
-         // Loop over the articles, read the timestamp start and end and store
-         // them in an array
+        // Loop over the articles, read the timestamp start and end and store
+        // them in an array
         $('article').each(function(o) {
             if ($(this).attr('data-start')) {
                 timestamps.push({
@@ -219,8 +269,8 @@
 
         all = timestamps.length;
 
-         // When the video is playing, round up the time to seconds and call the
-         // showsection function continuously.
+        // When the video is playing, round up the time to seconds and call the
+        // showsection function continuously.
         $('video').bind('timeupdate', function(event) {
             now = Math.round(videoPlayer[0].currentTime);
             $('.elapsedTime').text(now);
@@ -233,9 +283,9 @@
             old = now;
         });
 
-         // Test whether the current time is within the range of any of the
-         // defined timestamps and show the appropriate section by copying it
-         // to the blackboard.
+        // Test whether the current time is within the range of any of the
+        // defined timestamps and show the appropriate section by copying it
+        // to the blackboard.
         function showArticle(t)
         {
             var show = -1;      // Default: don't update the blackboard.
