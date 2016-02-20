@@ -7,13 +7,12 @@
 
     <style type="text/css">
         .container-fluid {
-            padding: 5px !important;
+            /*padding: 5px !important;*/
         }
         .jumbotron {
-            padding: 0 !important;
+            padding: 5px !important;
             margin-bottom: 0;
         }
-
         .videoControls {
             width: 100%;
             font-size: 20px;
@@ -21,19 +20,6 @@
 
         .videoControls span, .videoControls div {
             display: inline-block;
-            color: #999;
-        }
-
-        .btnMute, .btnFullscreen {
-            float: right;
-            padding-left: 20px;
-            margin-right: 20px;
-            color: #999;
-        }
-
-        .btnPlay {
-            padding-right: 20px;
-            margin-left: 20px;
             color: #999;
         }
 
@@ -50,12 +36,18 @@
             background-color: #000;
             color: #fff;
             text-align: left;
+            font-size: 1.5em;
         }
         .blackboard a:link, a:visited {
             font-size: 1.5em;
             color: greenyellow;
         }
+        .blackboard p {
+            margin: 0 0 10px 10px;
+            font-size: 1em;
+        }
         .player {
+            padding-bottom: 0;
         }
     </style>
 </head>
@@ -122,6 +114,7 @@
         </div>
     </div>
 </div>
+
 <!-- HTML timed articles -->
 <article data-start="0" data-end="5">
     <p>Slow pan down to the forest.</p>
@@ -198,27 +191,14 @@
 <script>
     $( document ).ready(function() {
 
-        // Force blackboard to the same height as the player.
+        // Force blackboard to be the same height as the player.
         $(window).resize(function() {
             $("#blackboard").height($("#player").height());
         })
         $(window).resize(); // On page load
 
-
         // HTML5 video event handlers.
         var videoPlayer = $('#videoPlayer');
-
-        $('.btnPlay').click(function() {
-            if (videoPlayer[0].paused) {
-                videoPlayer[0].play();
-                $('.glyphicon-play').attr('class', 'glyphicon glyphicon-pause');
-            }
-            else {
-                videoPlayer[0].pause();
-                $('.glyphicon-pause').attr('class', 'glyphicon glyphicon-play');
-            }
-            return false;
-        })
 
         videoPlayer.on('loadedmetadata', function() {
             $('.videoLength').text(Math.round(videoPlayer[0].duration));
@@ -226,22 +206,6 @@
 
         videoPlayer.on('play', function() {
             $(window).resize();
-        });
-
-        $('.btnMute').click(function() {
-            if (videoPlayer[0].muted == false) {
-                videoPlayer[0].muted = true;
-                $('.glyphicon-volume-up').attr('class', 'glyphicon glyphicon-volume-off');
-            } else {
-                videoPlayer[0].muted = false;
-                $('.glyphicon-volume-off').attr('class', 'glyphicon glyphicon-volume-up');
-            }
-        });
-
-        $('.btnFullscreen').on('click', function() {
-            videoPlayer[0].webkitEnterFullscreen();
-            videoPlayer[0].mozRequestFullScreen();
-            return false;
         });
 
         // Timed article display.
