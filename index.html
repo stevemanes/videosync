@@ -3,6 +3,7 @@
 <head>
     <title>HTML5 Responsive Video Player with Synchronized Annotations</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style type="text/css">
@@ -51,6 +52,10 @@
             border: none;
             background: transparent !important;
         }
+        .list-group-item {
+            border: none;
+            background: transparent !important;
+        }
     </style>
 </head>
 <body>
@@ -70,17 +75,17 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
+                    <li class="active"><a class="list-group-item" href="#"><i class="fa fa-home fa-fw"></i>&nbsp; Home</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lockers<b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-archive fa-fw"></i>&nbsp;Lockers<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Locker 1</a></li>
-                            <li><a href="#">Locker 2</a></li>
-                            <li><a href="#">Locker 3</a></li>
+                            <li><a class="list-group-item" href="#"><i class="fa fa-archive fa-fw"></i>&nbsp;Locker 1</a></li>
+                            <li><a class="list-group-item" href="#"><i class="fa fa-archive fa-fw"></i>&nbsp;Locker 2</a></li>
+                            <li><a class="list-group-item" href="#"><i class="fa fa-archive fa-fw"></i>&nbsp;Locker 3</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a class="list-group-item" href="#"><i class="fa fa-exclamation fa-fw"></i>&nbsp;About</a></li>
+                    <li><a class="list-group-item" href="#"><i class="fa fa-envelope fa-fw"></i>&nbsp;Contact</a></li>
                 </ul>
             </div>
         </div>
@@ -127,7 +132,11 @@
     <p>Purple bird chirps.</p>
 </article>
 
-<article data-start="20" data-end="23">
+<article data-start="20" data-end="21">
+    <p>*klonk*</p>
+</article>
+
+<article data-start="21" data-end="23">
     <p>*klonk*</p>
     <p>Show the producer credits</p>
 </article>
@@ -145,6 +154,7 @@
 </article>
 
 <article data-start="34" data-end="40">
+    <p>Get closer...</p>
     <p>And closer...</p>
 </article>
 
