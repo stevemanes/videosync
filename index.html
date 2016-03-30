@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="import" href="blackboard.test.tpl">
 
     <style type="text/css">
         .container-fluid {
@@ -116,79 +117,8 @@
 </div>
 
 <!-- HTML timed articles -->
-<article data-start="0" data-end="5">
-    <p>Slow pan down to the forest.</p>
-</article>
+<div id="template"></div>
 
-<article data-start="5" data-end="9">
-    <p>Keep panning...</p>
-</article>
-
-<article data-start="9" data-end="15">
-    <p>John Williams-y orchestra overture begins.</p>
-</article>
-
-<article data-start="15" data-end="19">
-    <p>Purple bird chirps.</p>
-</article>
-
-<article data-start="20" data-end="21">
-    <p>*klonk*</p>
-</article>
-
-<article data-start="21" data-end="23">
-    <p>*klonk*</p>
-    <p>Show the producer credits</p>
-</article>
-
-<article data-start="25" data-end="28">
-    <p>Here's the movie title</p>
-</article>
-
-<article data-start="28" data-end="30">
-    <p>Establishment shot on a rabbit hole</p>
-</article>
-
-<article data-start="31" data-end="34">
-    <p>Get closer...</p>
-</article>
-
-<article data-start="34" data-end="40">
-    <p>Get closer...</p>
-    <p>And closer...</p>
-</article>
-
-<article data-start="42" data-end="45">
-    <p>Whoa, wait! Is that a gorilla?</p>
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item"
-                src="https://en.wikipedia.org/wiki/Gorilla"
-                style="-webkit-transform:scale(0.5);-moz-transform-scale(0.5);">
-        </iframe>
-    </div>
-</article>
-
-<article data-start="47" data-end="52">
-    <p>Nope, just Ralph Kramden in a rabbit suit.</p>
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item"
-                src="https://en.wikipedia.org/wiki/The_Honeymooners#/media/File:Gleason_honeymooners_1965.JPG"
-                style="-webkit-transform:scale(0.5);-moz-transform-scale(0.5);">
-        </iframe>
-    </div>
-</article>
-
-<article data-start="53" data-end="55">
-    <p>No more annotations.  Thanks for watching.</p>
-</article>
-
-<article data-start="55" data-end="100">
-    <a href="index.html">Watch it again</a>
-</article>
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -202,10 +132,20 @@
         })
         $(window).resize(); // On page load
 
+        // Load the article template.
+        var link = document.querySelector('link[rel="import"]');
+
+        // Clone the <template> in the import.
+        var template = link.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+
+        document.querySelector('#template').appendChild(clone);
+
         // HTML5 video event handlers.
         var videoPlayer = $('#videoPlayer');
 
         videoPlayer.on('loadedmetadata', function() {
+            //alert("length: " + videoPlayer[0].duration);
             $('.videoLength').text(Math.round(videoPlayer[0].duration));
         });
 
@@ -221,10 +161,10 @@
         var i = 0;
         var currentlyShowing = -1;
 
-        // Hide all articles via CSS
+        // Hide all articles via CSS.
         $('article').hide();
 
-        // Loop over the articles, read the timestamp start and end and store
+        // Loop through the articles, read the timestamp start and end and store
         // them in an array
         $('article').each(function(o) {
             if ($(this).attr('data-start')) {
